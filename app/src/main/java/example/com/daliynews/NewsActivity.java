@@ -40,6 +40,7 @@ public class NewsActivity extends AppCompatActivity {
     private TextView tvTitle;
     private TextView tvTime;
     private TextView tvContent;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,11 +53,11 @@ public class NewsActivity extends AppCompatActivity {
         //获取网址
         intentReceiveURL = getIntent();
         final String urlNews = intentReceiveURL.getStringExtra("URL");
-        if(!urlNews.isEmpty()){
-            Log.d("tag","url is :"+urlNews);
+        if (!urlNews.isEmpty()) {
+            Log.d("tag", "url is :" + urlNews);
         }
 
-        if(NetWorkUtil.isNetworkConnected(this)){
+        if (NetWorkUtil.isNetworkConnected(this)) {
             //下载html文件，分析
             Observable<String> observable = Observable.create(new ObservableOnSubscribe<String>() {
                 @Override
@@ -67,22 +68,22 @@ public class NewsActivity extends AppCompatActivity {
                             .url(urlNews)
                             .build();
                     final Call call = okHttpClient.newCall(requset);
-                    Response response=null;
-                    try{
-                        response= call.execute();
-                    } catch (IOException ee){
+                    Response response = null;
+                    try {
+                        response = call.execute();
+                    } catch (IOException ee) {
                         ee.printStackTrace();
                     }
 
-                    if(response!=null){
+                    if (response != null) {
                         String xmlResult = response.body().string();
-                        Log.d("tag","得到html文件");
+                        Log.d("tag", "得到html文件");
                         //Log.d("tag",xmlResult);
                         e.onNext(xmlResult);
-                        saveToTxt(xmlResult,"news.txt");
+                        saveToTxt(xmlResult, "news.txt");
 
                     } else {
-                        Log.d("tag","没有获取到html文件");
+                        Log.d("tag", "没有获取到html文件");
                     }
 
                 }
@@ -97,8 +98,8 @@ public class NewsActivity extends AppCompatActivity {
                     //doc实例化
                     Document doc = Jsoup.parse(s);
 
-                    if(doc!=null){
-                        Log.d("html","Jsoup实例化成功");
+                    if (doc != null) {
+                        Log.d("html", "Jsoup实例化成功");
                     } else {
 
                     }
@@ -112,23 +113,23 @@ public class NewsActivity extends AppCompatActivity {
                     //saveToTxt(doc.toString(),"story_body.txt");
                     //获取标题
                     Elements title = doc.getElementsByClass("story-body__h1");
-                    Log.d("html","title of news =  "+ title.text());
+                    Log.d("html", "title of news =  " + title.text());
 
                     tvTitle.setText(title.text());
 
                     //获取时间
                     Elements time = doc.select("div.mini-info-list-wrap ul li div");
-                    if(time!=null){
-                        Log.d("html","size of time is  "+time.size());
-                        Log.d("html","time is :"+ time.text());
+                    if (time != null) {
+                        Log.d("html", "size of time is  " + time.size());
+                        Log.d("html", "time is :" + time.text());
                     } else {
-                        Log.d("html","don't get time element");
+                        Log.d("html", "don't get time element");
                     }
 
                     //获取网页图片
                     Elements elementsSpanImg = doc.select("span.image-and-copyright-container");
                     Element[] img = new Element[elementsSpanImg.size()];
-                    Log.d("html","size of Img = "+elementsSpanImg.size());
+                    Log.d("html", "size of Img = " + elementsSpanImg.size());
 //                for(int i=0;i<elementsSpanImg.size();i++){
 //                    img[i] = elementsSpanImg.get(i).child(0);
 //
@@ -146,9 +147,9 @@ public class NewsActivity extends AppCompatActivity {
 
                     //获取正文内容
                     Elements elementsP = doc.select("div.story-body__inner p");
-                    Log.d("html","P size = "+ elementsP.size());
+                    Log.d("html", "P size = " + elementsP.size());
 
-                    for(Element e: elementsP){
+                    for (Element e : elementsP) {
                         //Log.d("tag",e.text());
                         stringBuilderContent.append(e.text());
                     }
@@ -162,13 +163,13 @@ public class NewsActivity extends AppCompatActivity {
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(consumer);
         } else {
-            Log.d("tag","news activity, no network");
+            Log.d("tag", "news activity, no network");
         }
 
     }
 
 
-    public void saveToTxt(String inputText ,String fileName) {
+    public void saveToTxt(String inputText, String fileName) {
         FileOutputStream out = null;
         BufferedWriter writer = null;
         try {
@@ -187,6 +188,6 @@ public class NewsActivity extends AppCompatActivity {
             }
         }
 
-        Log.d("tag",fileName+" has saved");
+        Log.d("tag", fileName + " has saved");
     }
 }

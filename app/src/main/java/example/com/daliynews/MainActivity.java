@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     //分页显示
     private TabLayout tabLayout = null;
-    private ViewPager viewPager ;
+    private ViewPager viewPager;
     private Fragment[] mFragmentArrays = new Fragment[3];
     private String[] mTabTitles = new String[3];
 
@@ -64,8 +64,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
         //分页显示 tab + viewpager
-        tabLayout = (TabLayout) findViewById(R.id.tablayout);
-        viewPager = (ViewPager) findViewById(R.id.tab_viewpager);
+        tabLayout = findViewById(R.id.tablayout);
+        viewPager = findViewById(R.id.tab_viewpager);
 
         mTabTitles[0] = "Home";
         mTabTitles[1] = "Popular";
@@ -160,7 +160,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Toast.makeText(this, "nav_send", Toast.LENGTH_SHORT).show();
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }

@@ -19,7 +19,7 @@ import example.com.daliynews.interfaces.OnItemClickListener;
  * Created by CJ on 2018/3/26.
  */
 
-public class PopularPageAdapter extends RecyclerView.Adapter<PopularPageAdapter.AuthorViewHolder>{
+public class PopularPageAdapter extends RecyclerView.Adapter<PopularPageAdapter.AuthorViewHolder> {
 
 
     ArrayList<String> titleList;
@@ -31,32 +31,32 @@ public class PopularPageAdapter extends RecyclerView.Adapter<PopularPageAdapter.
     private OnItemClickListener onItemClickListener;
 
 
-    public PopularPageAdapter(Context context, ArrayList<List<String>> list){
+    public PopularPageAdapter(Context context, ArrayList<List<String>> list) {
         this.context = context;
 
-        if(list!=null){
-            Log.d("tag","container is not empty, size = " + list.size());
+        if (list != null) {
+            Log.d("tag", "container is not empty, size = " + list.size());
 
             titleList = (ArrayList<String>) list.get(0);
             descripeList = (ArrayList<String>) list.get(1);
             picUrlList = (ArrayList<String>) list.get(4);
 
-            Log.d("tag","titleList is not empty, size = " + titleList.size());
-            Log.d("tag","descripeList is not empty, size = " + descripeList.size());
-            Log.d("tag","picUrlList is not empty, size = " + picUrlList.size());
+            Log.d("tag", "titleList is not empty, size = " + titleList.size());
+            Log.d("tag", "descripeList is not empty, size = " + descripeList.size());
+            Log.d("tag", "picUrlList is not empty, size = " + picUrlList.size());
         } else {
-            Log.d("tag","Container is  empty " );
+            Log.d("tag", "Container is  empty ");
         }
     }
 
 
     @Override
-    public PopularPageAdapter.AuthorViewHolder onCreateViewHolder(ViewGroup parent, int viewType){
+    public PopularPageAdapter.AuthorViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        View childView = inflater.inflate(R.layout.popular_page_layout,parent,false);
+        View childView = inflater.inflate(R.layout.popular_page_layout, parent, false);
 
-        PopularPageAdapter.AuthorViewHolder viewHolder= new AuthorViewHolder(childView);
-        return  viewHolder;
+        PopularPageAdapter.AuthorViewHolder viewHolder = new AuthorViewHolder(childView);
+        return viewHolder;
     }
 
     @Override
@@ -70,7 +70,7 @@ public class PopularPageAdapter extends RecyclerView.Adapter<PopularPageAdapter.
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    onItemClickListener.onItemClick(holder.itemView,holder.getLayoutPosition());
+                    onItemClickListener.onItemClick(holder.itemView, holder.getLayoutPosition());
                 }
             });
         }
@@ -78,9 +78,9 @@ public class PopularPageAdapter extends RecyclerView.Adapter<PopularPageAdapter.
     }
 
     //监听函数
-    public  void setOnItemClickListner(OnItemClickListener onItemClickListner){
+    public void setOnItemClickListner(OnItemClickListener onItemClickListner) {
 
-        this.onItemClickListener=onItemClickListner;
+        this.onItemClickListener = onItemClickListner;
     }
 
 
@@ -89,19 +89,19 @@ public class PopularPageAdapter extends RecyclerView.Adapter<PopularPageAdapter.
         return 10;
     }
 
-    class AuthorViewHolder extends RecyclerView.ViewHolder{
+    class AuthorViewHolder extends RecyclerView.ViewHolder {
 
         //TODO list 每一行的内容
         ImageView imgItem;
         TextView mNickNameView;
         TextView mMottoView;
 
-        public AuthorViewHolder(View itemView){
+        public AuthorViewHolder(View itemView) {
             super(itemView);
             //TODO list 每一行内容初始化
-            imgItem = (ImageView) itemView.findViewById(R.id.iv_portrait);
-            mNickNameView = (TextView) itemView.findViewById(R.id.tv_nickname);
-            mMottoView = (TextView) itemView.findViewById(R.id.tv_motto);
+            imgItem = itemView.findViewById(R.id.iv_portrait);
+            mNickNameView = itemView.findViewById(R.id.tv_nickname);
+            mMottoView = itemView.findViewById(R.id.tv_motto);
         }
     }
 }

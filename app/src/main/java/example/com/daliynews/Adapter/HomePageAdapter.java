@@ -1,16 +1,13 @@
 package example.com.daliynews.Adapter;
 
-import android.content.Context;
+
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import example.com.daliynews.R;
 import example.com.daliynews.interfaces.OnItemClickListener;
@@ -19,14 +16,14 @@ import example.com.daliynews.interfaces.OnItemClickListener;
  * Created by CJ on 2018/3/27.
  */
 
-public class HomePageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
+public class HomePageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public static final int ONE_ITEM = 1;
     public static final int TWO_ITEM = 2;
 
     //ArrayList<String> titleList;
     //ArrayList<String> descripeList;
     //ArrayList<String> picUrlList;
-  //  private Context context;
+    //  private Context context;
 
     private OnItemClickListener onItemClickListener;//声明接口变量
 
@@ -49,15 +46,15 @@ public class HomePageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }*/
 
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType){
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        RecyclerView.ViewHolder holder =null;
+        RecyclerView.ViewHolder holder = null;
 
-        if(ONE_ITEM == viewType){
-            View v = inflater.inflate(R.layout.home_page_layout_one,parent,false);
+        if (ONE_ITEM == viewType) {
+            View v = inflater.inflate(R.layout.home_page_layout_one, parent, false);
             holder = new OneViewHolder(v);
-        }else {
-            View v = inflater.inflate(R.layout.popular_page_layout,parent,false);
+        } else {
+            View v = inflater.inflate(R.layout.popular_page_layout, parent, false);
             //holder = new OneViewHolder(v);
             holder = new TwoViewHolder(v);
         }
@@ -73,7 +70,7 @@ public class HomePageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    onItemClickListener.onItemClick(holder.itemView,holder.getLayoutPosition());
+                    onItemClickListener.onItemClick(holder.itemView, holder.getLayoutPosition());
                 }
             });
         }
@@ -96,58 +93,59 @@ public class HomePageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             });
         }
     }*/
-    public void setOnItemClickListener(OnItemClickListener mOnItemClickListener){
+    public void setOnItemClickListener(OnItemClickListener mOnItemClickListener) {
         this.onItemClickListener = mOnItemClickListener;
     }
 
     @Override
-    public int getItemViewType(int position){
-        if(position==0){
+    public int getItemViewType(int position) {
+        if (position == 0) {
             return ONE_ITEM;
-        }else {
+        } else {
             return TWO_ITEM;
         }
     }
 
     @Override
-    public int getItemCount(){
+    public int getItemCount() {
         return 15;
     }
 
     //item_one
-    class OneViewHolder extends RecyclerView.ViewHolder{
+    class OneViewHolder extends RecyclerView.ViewHolder {
 
         ImageView img;
-        TextView  tv;
-        public OneViewHolder(View view){
+        TextView tv;
+
+        public OneViewHolder(View view) {
             super(view);
-            img = (ImageView) view.findViewById(R.id.image_item_one);
-            tv = (TextView) view.findViewById(R.id.tv_item_one);
+            img = view.findViewById(R.id.image_item_one);
+            tv = view.findViewById(R.id.tv_item_one);
         }
 
     }
 
     //fragment1
     class TwoViewHolder extends RecyclerView.ViewHolder {
-       /* ImageView img;
-        TextView  tv,tv_time;
-        public TwoViewHolder(View view){
-            super(view);
-            img = (ImageView) view.findViewById(R.id.img_item);
-            tv = (TextView) view.findViewById(R.id.tv_item);
-            tv_time = (TextView) view.findViewById(R.id.tv_item_time);
-        }*/
-       //TODO list 每一行的内容
-       ImageView imgItem;
+        /* ImageView img;
+         TextView  tv,tv_time;
+         public TwoViewHolder(View view){
+             super(view);
+             img = (ImageView) view.findViewById(R.id.img_item);
+             tv = (TextView) view.findViewById(R.id.tv_item);
+             tv_time = (TextView) view.findViewById(R.id.tv_item_time);
+         }*/
+        //TODO list 每一行的内容
+        ImageView imgItem;
         TextView mNickNameView;
         TextView mMottoView;
 
-        public TwoViewHolder(View itemView){
+        public TwoViewHolder(View itemView) {
             super(itemView);
             //TODO list 每一行内容初始化
-            imgItem = (ImageView) itemView.findViewById(R.id.iv_portrait);
-            mNickNameView = (TextView) itemView.findViewById(R.id.tv_nickname);
-            mMottoView = (TextView) itemView.findViewById(R.id.tv_motto);
+            imgItem = itemView.findViewById(R.id.iv_portrait);
+            mNickNameView = itemView.findViewById(R.id.tv_nickname);
+            mMottoView = itemView.findViewById(R.id.tv_motto);
         }
 
     }
