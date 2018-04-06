@@ -1,22 +1,18 @@
 package example.com.daliynews;
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -64,7 +60,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
         //分页显示 tab + viewpager
-        tabLayout = findViewById(R.id.tablayout);
+        tabLayout = findViewById(R.id.tab_layout);
         viewPager = findViewById(R.id.tab_viewpager);
 
         mTabTitles[0] = "Home";

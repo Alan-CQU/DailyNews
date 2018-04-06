@@ -120,7 +120,7 @@ public class HomePageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         public OneViewHolder(View view) {
             super(view);
             img = view.findViewById(R.id.image_item_one);
-            tv = view.findViewById(R.id.tv_item_one);
+            tv = view.findViewById(R.id.lead_story);
         }
 
     }

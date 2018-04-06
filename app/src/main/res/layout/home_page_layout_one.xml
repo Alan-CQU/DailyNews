@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#FFFFFF">
+    android:background="#FFFFFF"
+    android:orientation="vertical">
 
     <ImageView
-        android:layout_gravity="center"
         android:id="@+id/image_item_one"
         android:layout_width="match_parent"
         android:layout_height="200dp"
+        android:layout_gravity="center"
         android:scaleType="centerCrop"
         app:srcCompat="@drawable/bear" />
 
     <TextView
-        android:id="@+id/tv_item_one"
+        android:id="@+id/lead_story"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="22sp"
+        android:text="  This is big news, a wild bear appeared in Chongqing"
         android:textColor="#000000"
-        android:text="  This is big news, there is a while bear who appear in Chongqing"/>
+        android:textSize="22sp" />
 </LinearLayout>

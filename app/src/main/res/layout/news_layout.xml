@@ -1,18 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    android:layout_width="match_parent" android:layout_height="match_parent">
-
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:scrollbars="none"
+        android:layout_alignParentTop="true">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" >
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/tv_newsTitle"
@@ -20,28 +22,28 @@
                 android:layout_height="wrap_content"
                 android:background="@android:color/white"
                 android:padding="16dp"
-                android:text="NEWS NEWS NEWS NEWS NEWS NEWS NEWS NEWS NEWS NEWS"
+                android:gravity="center"
+                android:text="... loading"
                 android:textSize="28sp" />
 
             <ImageView
                 android:id="@+id/imageView"
                 android:layout_width="match_parent"
                 android:layout_height="180dp"
-                app:srcCompat="@drawable/bear"
-                android:background="@android:color/white"
-                android:padding="16dp"/>
-
-            <TextView
-                android:id="@+id/tv_newsContent"
-                android:layout_width="match_parent"
-                android:layout_height="193dp"
                 android:background="@android:color/white"
                 android:padding="16dp"
-                android:text="NEWS NEWS NEWS NEWS NEWS NEWS NEWS NEWS NEWS NEWS"
-                android:textSize="20sp" />
+                app:srcCompat="@drawable/bear" />
+
+            <WebView
+                android:id="@+id/newsContent"
+                android:background="@null"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scrollbars="none"
+                android:padding="16dp"/>
 
         </LinearLayout>
     </ScrollView>
 
 
-</LinearLayout>
+</RelativeLayout>

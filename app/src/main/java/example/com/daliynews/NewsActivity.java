@@ -4,7 +4,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Html;
 import android.util.Log;
+import android.webkit.WebView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.jsoup.Jsoup;
@@ -39,15 +42,15 @@ public class NewsActivity extends AppCompatActivity {
 
     private TextView tvTitle;
     private TextView tvTime;
-    private TextView tvContent;
+    private WebView tvContent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.news_layout);
 
-        tvTitle = (TextView) findViewById(R.id.tv_newsTitle);
-        tvContent = (TextView) findViewById(R.id.tv_newsContent);
+        tvTitle = findViewById(R.id.tv_newsTitle);
+        tvContent = findViewById(R.id.newsContent);
 
 
         //获取网址
@@ -64,10 +67,10 @@ public class NewsActivity extends AppCompatActivity {
                 public void subscribe(ObservableEmitter<String> e) throws Exception {
                     //连接网络，获得xml数据
                     OkHttpClient okHttpClient = new OkHttpClient();
-                    Request requset = new Request.Builder()
+                    Request request = new Request.Builder()
                             .url(urlNews)
                             .build();
-                    final Call call = okHttpClient.newCall(requset);
+                    final Call call = okHttpClient.newCall(request);
                     Response response = null;
                     try {
                         response = call.execute();
@@ -113,7 +116,7 @@ public class NewsActivity extends AppCompatActivity {
                     //saveToTxt(doc.toString(),"story_body.txt");
                     //获取标题
                     Elements title = doc.getElementsByClass("story-body__h1");
-                    Log.d("html", "title of news =  " + title.text());
+                    Log.d("html", "News title =  " + title.text());
 
                     tvTitle.setText(title.text());
 
@@ -153,8 +156,22 @@ public class NewsActivity extends AppCompatActivity {
                         //Log.d("tag",e.text());
                         stringBuilderContent.append(e.text());
                     }
+                    String content = stringBuilderContent.toString();
+                    //tvContent.setText(stringBuilderContent.toString());
 
-                    tvContent.setText(stringBuilderContent.toString());
+                    String partOne = "<html><head></head><body style=\"text-align:justify;color:gray;\">";
+                    String partTwo = "</body></html>";
+
+                    String ready = partOne + content + partTwo;
+
+                    tvContent.setVerticalScrollBarEnabled(false);
+
+
+
+
+                    tvContent.loadData(ready, "text/html; charset=utf-8", "utf-8");
+
+                    Log.d("html", "New content = " + content);
 
                 }
             };
