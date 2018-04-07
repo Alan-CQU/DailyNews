@@ -2,9 +2,9 @@
 
 ![news](text_justify.gif)
 
-My Changes:
 
-- Move the splash screen do be within the main activity, enabling preload of the content while the splash is still running. Here is an example:
+Todo: 
+- Move the splash screen to be within the main activity, enabling preload of the content while the splash is still running. You can then play with the view visibility 
 
 ```java
  setContentView(R.layout.activity_main);
@@ -41,7 +41,7 @@ example.com.daliynews E/AndroidRuntime: FATAL EXCEPTION: main
 
 ```
 
-The temporary fix for the above which I use for further testing the application
+The temporary fix for the above which I used for further testing the application
 
 ```java
  //Todo: Temporary fix, to update
