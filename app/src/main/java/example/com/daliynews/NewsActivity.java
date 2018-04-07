@@ -1,8 +1,5 @@
 /**
- * 
  * This activity is used for presenting detail news
- *
- * 
  */
 
 package example.com.daliynews;
@@ -19,6 +16,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -55,7 +53,7 @@ public class NewsActivity extends AppCompatActivity {
     private Intent mIintentReceiveURL;
     private String mFormerPageImgUrl;
     private TextView mTitle;
-    private TextView mContent;
+    private WebView mContent;
     private ImageView mImg;
     private DBOperation mDbOperation;
 
@@ -67,7 +65,7 @@ public class NewsActivity extends AppCompatActivity {
         mDbOperation = new DBOperation(getApplication());
         mImg = (ImageView) findViewById(R.id.img_newPicture);
         mTitle = (TextView) findViewById(R.id.tv_newsTitle);
-        mContent = (TextView) findViewById(R.id.tv_newsContent);
+        mContent = findViewById(R.id.tv_newsContent);
 
         //获取网址  get the url of this news from the intent
         mIintentReceiveURL = getIntent();
@@ -85,23 +83,30 @@ public class NewsActivity extends AppCompatActivity {
         });
 
 
-
-        //if we has network
-        if(NetWorkUtil.isNetworkConnected(this)){
+        //If connected to a network
+        if (NetWorkUtil.isNetworkConnected(this)) {
 
             //if we has a record in database
-            if(!mDbOperation.isEmpty("img"+urlNews)){
+            if (!mDbOperation.isEmpty("img" + urlNews)) {
                 //get data restored in preference
                 SharedPreferences pref = getSharedPreferences("NewsDetailData", MODE_PRIVATE);
-                mTitle.setText(pref.getString("title"+urlNews,"error"));
-                mContent.setText(pref.getString("content"+urlNews,"error"));
+                mTitle.setText(pref.getString("title" + urlNews, "error"));
 
-                byte[] img = mDbOperation.readImage("img"+urlNews);
-                Bitmap bitmap = BitmapFactory.decodeByteArray(img,0,img.length);
-                BitmapDrawable drawable = new BitmapDrawable(getApplication().getResources(),bitmap);
+                String content = pref.getString("content" + urlNews, "error");
+                String partOne = "<html><head></head><body style=\"text-align:justify;color:gray;\">";
+                String partTwo = "</body></html>";
+                String ready = partOne + content + partTwo;
+
+                mContent.setVerticalScrollBarEnabled(false);
+
+                mContent.loadData(ready, "text/html; charset=utf-8", "utf-8");
+
+                byte[] img = mDbOperation.readImage("img" + urlNews);
+                Bitmap bitmap = BitmapFactory.decodeByteArray(img, 0, img.length);
+                BitmapDrawable drawable = new BitmapDrawable(getApplication().getResources(), bitmap);
                 mImg.setImageDrawable(drawable);
 
-            }else {
+            } else {
 
                 //下载html文件，分析  download html file and analyse
                 Observable<String> observable = Observable.create(new ObservableOnSubscribe<String>() {
@@ -113,14 +118,14 @@ public class NewsActivity extends AppCompatActivity {
                                 .url(urlNews)
                                 .build();
                         final Call call = okHttpClient.newCall(requset);
-                        Response response=null;
-                        try{
-                            response= call.execute();
-                        } catch (IOException ee){
+                        Response response = null;
+                        try {
+                            response = call.execute();
+                        } catch (IOException ee) {
                             ee.printStackTrace();
                         }
 
-                        if(response!=null){
+                        if (response != null) {
                             String xmlResult = response.body().string();
                             //Log.d("tag","得到html文件");
                             //Log.d("tag",xmlResult);
@@ -128,7 +133,7 @@ public class NewsActivity extends AppCompatActivity {
                             //saveToTxt(xmlResult,"news.txt");
 
                         } else {
-                            Log.d("tag","没有获取到html文件");
+                            Log.d("tag", "没有获取到html文件");
                         }
 
                     }
@@ -154,43 +159,49 @@ public class NewsActivity extends AppCompatActivity {
 
                         //update  news title
                         mTitle.setText(title.text());
-                        SharedPreferenceCacheUtil.editor.putString("title"+urlNews,title.text());
+                        SharedPreferenceCacheUtil.editor.putString("title" + urlNews, title.text());
 
                         //获取正文内容
                         Elements elementsP = doc.select("div.story-body__inner p");
                         //Log.d("html","P size = "+ elementsP.size());
-                        for(Element e: elementsP){
+                        for (Element e : elementsP) {
                             //Log.d("tag",e.text());
                             stringBuilderContent.append(e.text() + "\n\n");
                         }
 
                         //set new content
-                        mContent.setText(stringBuilderContent.toString());
-                        SharedPreferenceCacheUtil.editor.putString("content"+urlNews,stringBuilderContent.toString());
+                        String content = stringBuilderContent.toString();
+                        String partOne = "<html><head></head><body style=\"text-align:justify;color:gray;\">";
+                        String partTwo = "</body></html>";
+                        String ready = partOne + content + partTwo;
+                        mContent.setVerticalScrollBarEnabled(false);
+                        mContent.loadData(ready, "text/html; charset=utf-8", "utf-8");
+
+                        SharedPreferenceCacheUtil.editor.putString("content" + urlNews, stringBuilderContent.toString());
                         SharedPreferenceCacheUtil.editor.commit();
 
                         //获取网页图片
-                        String srcUrl ="";
+                        String srcUrl = "";
                         Elements elementsSpanImg = doc.select("span.image-and-copyright-container");
-                        if(elementsSpanImg.size()!=0){
-                            srcUrl= elementsSpanImg.get(0).child(0).attr("src");
-                            Log.d("tag","img url is "+srcUrl);
+                        if (elementsSpanImg.size() != 0) {
+                            srcUrl = elementsSpanImg.get(0).child(0).attr("src");
+                            Log.d("tag", "img url is " + srcUrl);
 
-                            if(!srcUrl.isEmpty()){
-                                DownLoadImgUtil task = new DownLoadImgUtil(mImg,getApplication(),true,"img"+urlNews);
+                            if (!srcUrl.isEmpty()) {
+                                DownLoadImgUtil task = new DownLoadImgUtil(mImg, getApplication(), true, "img" + urlNews);
                                 task.execute(srcUrl);
-                            }else {
+                            } else {
 //                            Log.d("tag","获取图片失败");
 //                            Log.d("tag",elementsSpanImg.toString());
-                                srcUrl= elementsSpanImg.get(0).child(0).attr("data-src");
-                                Log.d("tag","img url is"+srcUrl);
-                                DownLoadImgUtil task = new DownLoadImgUtil(mImg,getApplication(),true,"img"+urlNews);
+                                srcUrl = elementsSpanImg.get(0).child(0).attr("data-src");
+                                Log.d("tag", "img url is" + srcUrl);
+                                DownLoadImgUtil task = new DownLoadImgUtil(mImg, getApplication(), true, "img" + urlNews);
                                 task.execute(srcUrl);
                             }
 
                         } else {  //this is for a news html that contains video
 
-                            DownLoadImgUtil task = new DownLoadImgUtil(mImg,getApplication(),true,"img"+urlNews);
+                            DownLoadImgUtil task = new DownLoadImgUtil(mImg, getApplication(), true, "img" + urlNews);
                             task.execute(mFormerPageImgUrl);
                         }
 
@@ -205,21 +216,27 @@ public class NewsActivity extends AppCompatActivity {
             }
 
         } else {
-            Log.d("tag","news activity, no network");
+            Log.d("tag", "news activity, no network");
 
             //get data restored in preference
             SharedPreferences pref = getSharedPreferences("NewsDetailData", MODE_PRIVATE);
-            mTitle.setText(pref.getString("title"+urlNews,"error"));
-            mContent.setText(pref.getString("content"+urlNews,"error"));
+            mTitle.setText(pref.getString("title" + urlNews, "error"));
+
+            String partOne = "<html><head></head><body style=\"text-align:justify;color:gray;\">";
+            String partTwo = "</body></html>";
+            String ready = partOne + pref.getString("content" + urlNews, "error") + partTwo;
+            mContent.setVerticalScrollBarEnabled(false);
+            mContent.loadData(ready, "text/html; charset=utf-8", "utf-8");
+
 
 
             //get data restored in database
-            boolean result = mDbOperation.isEmpty("img"+urlNews);
-            Log.d("tag","database has record? "+result);
-            if(result==false){
-                byte[] img = mDbOperation.readImage("img"+urlNews);
-                Bitmap bitmap = BitmapFactory.decodeByteArray(img,0,img.length);
-                BitmapDrawable drawable = new BitmapDrawable(getApplication().getResources(),bitmap);
+            boolean result = mDbOperation.isEmpty("img" + urlNews);
+            Log.d("tag", "database has record? " + result);
+            if (result == false) {
+                byte[] img = mDbOperation.readImage("img" + urlNews);
+                Bitmap bitmap = BitmapFactory.decodeByteArray(img, 0, img.length);
+                BitmapDrawable drawable = new BitmapDrawable(getApplication().getResources(), bitmap);
                 mImg.setImageDrawable(drawable);
             }
 
@@ -236,7 +253,7 @@ public class NewsActivity extends AppCompatActivity {
      * @param inputText
      * @param fileName
      */
-    public void saveToTxt(String inputText ,String fileName) {
+    public void saveToTxt(String inputText, String fileName) {
         FileOutputStream out = null;
         BufferedWriter writer = null;
         try {
@@ -255,6 +272,6 @@ public class NewsActivity extends AppCompatActivity {
             }
         }
 
-        Log.d("tag",fileName+" has saved");
+        Log.d("tag", fileName + " has saved");
     }
 }

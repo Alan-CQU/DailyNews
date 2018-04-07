@@ -188,10 +188,16 @@ public class TabFragmentHome extends Fragment {
             public void onItemClick(View view, int position) {
                 Toast.makeText(getActivity(), "position is "+ position, Toast.LENGTH_SHORT).show();
                 //send the url for news activity
-                Intent intent = new Intent(getActivity(),NewsActivity.class);
-                intent.putExtra("URL",((ArrayList<String>)containerList.get(2)).get(position));
-                intent.putExtra("IMG_URL",((ArrayList<String>)containerList.get(4)).get(position));
-                startActivity(intent);
+                //Todo: Temporary fix, to update
+                if (position  <= containerList.size() -1 ){
+                    Intent intent = new Intent(getActivity(),NewsActivity.class);
+                    intent.putExtra("URL",((ArrayList<String>)containerList.get(2)).get(position));
+                    intent.putExtra("IMG_URL",((ArrayList<String>)containerList.get(4)).get(position));
+                    startActivity(intent);
+                }else{
+                    Log.e("TAG", "Index issue: "+position);
+                }
+
             }
         });
         mRecyclerView.setAdapter(mAdapter);
