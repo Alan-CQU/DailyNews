@@ -1,40 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="100dp"
-    android:layout_margin = "4dp">
-
-    <ImageView
-        android:id="@+id/img_item"
-        android:layout_width="130dp"
-        android:layout_height="100dp"
-        android:src="@drawable/bear"
-        android:background="@android:color/white" />
-
-    <LinearLayout
+    android:layout_height="110dp"
+    android:padding="4dp"
+    android:orientation="horizontal">
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:background="@android:color/white">
+        android:background="@android:color/white"
+        android:orientation="vertical">
+    <ImageView
+        android:id="@+id/iv_portrait_home"
+        android:layout_width="140dp"
+        android:layout_height="100dp"
+        android:layout_margin="2dp"
+        android:scaleType="fitCenter"
+        android:background="@android:color/white"
+        android:src="@drawable/bear" />
+
 
         <TextView
-            android:id="@+id/tv_item"
+            android:id="@+id/tv_title_home"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="6"
-            android:text="News NEWS news"
-            android:textColor="#000000"
-            android:textSize="20dp"
-            android:fontFamily="sans-serif"/>
+            android:layout_alignTop="@+id/iv_portrait_home"
+            android:layout_toEndOf="@+id/iv_portrait_home"
+            android:layout_toRightOf="@+id/iv_portrait_home"
+            android:ellipsize="end"
+            android:padding="5dp"
+            android:lines="2"
+            android:text="新闻标题"
+            android:textColor="@color/ind_red"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+
         <TextView
-            android:id="@+id/tv_item_time"
+            android:id="@+id/tv_time_home"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_alignBottom="@+id/iv_portrait_home"
+            android:layout_toEndOf="@+id/iv_portrait_home"
+            android:layout_toRightOf="@+id/iv_portrait_home"
+            android:padding="5dp"
             android:text="2018/01/01"
             android:textColor="@android:color/darker_gray"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            android:textStyle="bold"/>
 
-    </LinearLayout>
+
+    </RelativeLayout>
+
+
 </LinearLayout>

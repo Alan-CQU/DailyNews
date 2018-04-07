@@ -7,20 +7,18 @@
     android:layout_margin = "4dp">
 
 
-    <ImageView
-        android:id="@+id/img_video"
-        android:layout_marginBottom="20dp"
+    <cn.jzvd.JZVideoPlayerStandard
+        android:id="@+id/player_item_video"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:src="@drawable/bear"/>
+        android:layout_height="190dp" />
     <TextView
-        android:id="@+id/tv_title"
+        android:id="@+id/tv_item_videotitle"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_weight="1"
         android:text="News NEWS news"
-        android:background="#000000"
-        android:textColor="#ffffff"
+        android:background="#ffffff"
+        android:textColor="#000000"
         android:textSize="20sp"
         android:fontFamily="sans-serif"/>
 

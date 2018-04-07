@@ -1,4 +1,3 @@
-#DailyNews
+# DailyNews
 
-![Demo](display_news.gif)
-
+![news](text_justify.png)

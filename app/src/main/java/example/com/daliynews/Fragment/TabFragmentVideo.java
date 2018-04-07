@@ -5,18 +5,22 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import cn.jzvd.JZVideoPlayer;
 import example.com.daliynews.Adapter.VideoPageAdapter;
 import example.com.daliynews.NewsActivity;
 import example.com.daliynews.R;
-import example.com.daliynews.interfaces.OnItemClickListener;
+
 
 /**
  * Created by CJ on 2018/3/27.
+ *
+ * show video news
  */
 
 public class TabFragmentVideo extends Fragment {
@@ -37,16 +41,33 @@ public class TabFragmentVideo extends Fragment {
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
 
         recyclerView.setLayoutManager(layoutManager);
-        VideoPageAdapter mVideoPageAdapter = new VideoPageAdapter();
-        mVideoPageAdapter.setOnItemClickListener(new OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                Toast.makeText(getActivity(),  "sssssssss", Toast.LENGTH_SHORT).show();
-                //Intent intent = new Intent(getActivity(), NewsActivity.class);
-                //startActivity(intent);
-            }
-        });
+        VideoPageAdapter mVideoPageAdapter = new VideoPageAdapter(getActivity());
         recyclerView.setAdapter(mVideoPageAdapter);
         return  rootView;
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getView().setFocusableInTouchMode(true);
+        getView().requestFocus();
+        getView().setOnKeyListener(new View.OnKeyListener(){
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK){
+                    if (JZVideoPlayer.backPress()){
+                        return true;
+                    }
+                    return false;
+                }
+                return false;
+            }
+        });
+    }
+    @Override
+    public void onPause() {
+        super.onPause();
+        JZVideoPlayer.releaseAllVideos();
+    }
+
 }

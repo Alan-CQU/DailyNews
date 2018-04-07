@@ -5,7 +5,9 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
 /**
- * Created by Meiji on 2017/5/2.
+ * Created by CJ on 2018/4/1
+ *
+ * this class are used for judge network is ok or not
  */
 
 public class NetWorkUtil {

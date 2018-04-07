@@ -1,32 +1,38 @@
 package example.com.daliynews;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.design.widget.NavigationView;
-import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
 import example.com.daliynews.Fragment.TabFragmentHome;
 import example.com.daliynews.Fragment.TabFragmentPopular;
 import example.com.daliynews.Fragment.TabFragmentVideo;
+import example.com.daliynews.database.DBOperation;
+import example.com.daliynews.until.SharedPreferenceCacheUtil;
+
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    //分页显示
-    private TabLayout tabLayout = null;
-    private ViewPager viewPager;
+    //these components are used to show pages
+    private TabLayout mTabLayout = null;
+    private ViewPager mViewPager ;
     private Fragment[] mFragmentArrays = new Fragment[3];
     private String[] mTabTitles = new String[3];
+    DBOperation mDbOperate;
 
 
     @Override
@@ -34,19 +40,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
+        //initial the database
+        mDbOperate = new DBOperation(getApplication());
+
+        //init sharedpreference
+        SharedPreferenceCacheUtil.init(getApplication());
+        Log.d("tag","初始化sharaePreference 成功");
+
         //Toolbar +  drawerlayout
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        //悬浮按钮
-//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-//            }
-//        });
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -56,18 +61,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-        //toolbar.setVisibility(View.GONE);
 
 
         //分页显示 tab + viewpager
-        tabLayout = findViewById(R.id.tab_layout);
-        viewPager = findViewById(R.id.tab_viewpager);
+        mTabLayout = (TabLayout) findViewById(R.id.tab_layout);
+        mViewPager = (ViewPager) findViewById(R.id.tab_viewpager);
 
         mTabTitles[0] = "Home";
         mTabTitles[1] = "Popular";
         mTabTitles[2] = "Video";
         //固定三个板块间距
-        tabLayout.setTabMode(TabLayout.MODE_FIXED);
+        mTabLayout.setTabMode(TabLayout.MODE_FIXED);
 
         //实例化三个fragment 每个fragment采用不同的recycleView 适配器，实现不同布局的页面
         mFragmentArrays[0] = TabFragmentHome.newInstance();
@@ -75,12 +79,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mFragmentArrays[2] = TabFragmentVideo.newInstance();
 
         PagerAdapter pagerAdapter = new MyViewPagerAdapter(getSupportFragmentManager());
-        viewPager.setAdapter(pagerAdapter);
-        tabLayout.setupWithViewPager(viewPager);
+        mViewPager.setAdapter(pagerAdapter);
+        mTabLayout.setupWithViewPager(mViewPager);
     }
 
 
     //ViewPager的适配器
+
+    /**
+     * adapter for viewpager
+     */
     final class MyViewPagerAdapter extends FragmentPagerAdapter {
 
         public MyViewPagerAdapter(FragmentManager fm) {
@@ -103,6 +111,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    /**
+     * the drawerlayout is open when we click back button, close it first
+     */
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -135,28 +146,32 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //        return super.onOptionsItemSelected(item);
 //    }
 
-    @SuppressWarnings("StatementWithEmptyBody")
+
+
+    /**
+     * show slide bar and define response for those button
+     */
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-            Toast.makeText(this, "nav_camera", Toast.LENGTH_SHORT).show();
-        } else if (id == R.id.nav_gallery) {
-            Toast.makeText(this, "nav_gallery", Toast.LENGTH_SHORT).show();
-        } else if (id == R.id.nav_slideshow) {
-            Toast.makeText(this, "nav_slideshow", Toast.LENGTH_SHORT).show();
-        } else if (id == R.id.nav_manage) {
-            Toast.makeText(this, "nav_manage", Toast.LENGTH_SHORT).show();
+        if (id == R.id.clear_cache) {
+            mDbOperate.clearCache();
+            Toast.makeText(this, "Clear All Cache", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.nav_share) {
-            Toast.makeText(this, "nav_share", Toast.LENGTH_SHORT).show();
-        } else if (id == R.id.nav_send) {
-            Toast.makeText(this, "nav_send", Toast.LENGTH_SHORT).show();
+
+            //share my github for this apps
+            //Toast.makeText(this, "nav_share", Toast.LENGTH_SHORT).show();
+            Intent textIntent = new Intent(Intent.ACTION_SEND);
+            textIntent.setType("text/plain");
+            textIntent.putExtra(Intent.EXTRA_TEXT, "https://github.com/Alan-CQU/DailyNews");
+            startActivity(Intent.createChooser(textIntent, "分享github"));
+
         }
 
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
