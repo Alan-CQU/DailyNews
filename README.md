@@ -1,6 +1,6 @@
 # DailyNews
 
-![news](text_justify.png)
+![news](text_justify.gif)
 
 My Changes:
 
